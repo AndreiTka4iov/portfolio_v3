@@ -1,62 +1,155 @@
-import React from "react";
+import React, { useContext, createContext } from "react";
 import { NavLink } from "react-router-dom";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { GoHome } from "react-icons/go";
 import { LuLayoutList } from "react-icons/lu";
-import { RiApps2Line } from 'react-icons/ri'
+import { RiApps2Line } from "react-icons/ri";
+import { AiOutlineForm, AiOutlineUser } from "react-icons/ai";
+import { observer } from "mobx-react-lite";
+import { NavbarStore } from "./store";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
 interface ElementProps {
   icon?: any;
   text?: string;
-  active?: boolean;
   clear?: boolean;
+  last?: boolean;
+  onClick?: () => void;
+  className?: string
 }
+
+export const NavbarContext = createContext<NavbarStore>(new NavbarStore());
 
 const Element: React.FC<ElementProps> = ({
   icon,
   text,
-  active = false,
   clear = false,
+  last = false,
+  onClick,
+  className,
 }) => {
+  const state = useContext(NavbarContext);
+
+  if (clear) return <div className={`hidden sm:flex w-full h-16 ${className}`}></div>;
+
   const Icon = icon;
   const style = `
     flex
-    justify-center
+    justify-between
     items-center
+    gap-3
     w-full
     h-16
-    text-zinc-500
     text-3xl
+    text-zinc-500
     cursor-pointer 
-    hover:text-zinc-200
+    sm:hover:text-zinc-200
     transition-colors
-    ${active && "border-r border-cyan-400"}`;
-
-  if (clear) return <div className="w-full h-16"></div>;
+    ${last && "mt-auto"}
+    ${
+      text === "Menu" && state.fullNavbar
+        ? "text-cyan-400 hover:text-cyan-700"
+        : "text-zinc-500"
+    }`;
 
   return (
-    <div className={style}>
-      <Icon />
+    <div className={`${style} ${className}`} onClick={onClick}>
+      {state.fullNavbar && (
+        <span
+          className="
+          hidden
+          sm:inline-block
+          text-xl
+          font-medium
+          pl-3
+          animate-opacity"
+        >
+          {text}
+        </span>
+      )}
+      <div
+        className="
+          flex
+          justify-center
+          items-center
+          w-16
+          h-16"
+      >
+        <Icon />
+      </div>
     </div>
   );
 };
 
-const Navbar = () => {
+const Navbar = observer(() => {
+  const state = useContext(NavbarContext);
+  const window = useWindowDimensions()
+
+
+  
+
+  const style = `
+    w-full
+    h-16
+    border-t
+    mt-auto
+    grid
+    grid-cols-5
+    sm:h-full
+    sm:border-r
+    sm:border-t-0
+    border-zinc-800
+    sm:flex
+    sm:flex-col
+    gap-3
+    transition-width
+    ${state.fullNavbar ? "sm:w-52" : "sm:w-16"}
+  `;
+
   return (
-    <div className="h-full w-16 border-r border-zinc-800">
-      <Element text="Menu" icon={HiMenuAlt3} />
-      <Element clear />
-      <NavLink to="/">
+    <nav className={style}>
+      <Element
+        text="Menu"
+        icon={HiMenuAlt3}
+        onClick={() => (state.fullNavbar = !state.fullNavbar)}
+        className="hidden sm:flex"
+      />
+      <Element clear className="hidden sm:flex"/>
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive ? "border-t sm:border-r sm:border-t-0 border-cyan-400" : ""
+        }
+      >
         <Element text="Home" icon={GoHome} />
       </NavLink>
-      <NavLink to="/about">
+      <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          isActive ? "border-t sm:border-r sm:border-t-0 border-cyan-400" : ""
+        }
+      >
         <Element text="About" icon={LuLayoutList} />
       </NavLink>
-      <NavLink to="/projects">
+      <NavLink
+        to="/projects"
+        className={({ isActive }) =>
+          isActive ? "border-t sm:border-r sm:border-t-0 border-cyan-400" : ""
+        }
+      >
         <Element text="Projects" icon={RiApps2Line} />
       </NavLink>
-    </div>
+      <NavLink
+        to="/contact"
+        className={({ isActive }) =>
+          isActive ? "border-t sm:border-r sm:border-t-0 border-cyan-400" : ""
+        }
+      >
+        <Element text="Contact me" icon={AiOutlineForm} />
+      </NavLink>
+      <Element text="Sign in" icon={AiOutlineUser} last />
+    </nav>
   );
-};
+});
 
 export default Navbar;
