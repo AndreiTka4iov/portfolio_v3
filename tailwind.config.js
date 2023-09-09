@@ -5,6 +5,10 @@ module.exports = {
     extend: {
       transitionProperty: {
         width: "width",
+        height: "heightWhithHeader",
+        gridTemplateColumns: {
+          'abouElement': '64px 1fr',
+        }
       },
       keyframes: {
         opacity: {
@@ -39,6 +43,9 @@ module.exports = {
         fullNavbar: "calc(100% - 210px)",
         notFullNavbar: "calc(100% - 64px)",
       },
+      height: {
+        heightWhithHeader: "calc(100% - 64px)"
+      }
     },
   },
   plugins: [require("./plugins/animationDelay")],

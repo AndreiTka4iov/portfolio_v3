@@ -4,7 +4,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { GoHome } from "react-icons/go";
 import { LuLayoutList } from "react-icons/lu";
 import { RiApps2Line } from "react-icons/ri";
-import { AiOutlineForm, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineForm, AiFillGithub } from "react-icons/ai";
 import { observer } from "mobx-react-lite";
 import { NavbarStore } from "./store";
 
@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = observer(({ fullNavbar }) => {
   const state = useContext(NavbarContext);
 
   useEffect(() => {
-    fullNavbar(state.fullNavbar)
+    fullNavbar(state.fullNavbar);
     // eslint-disable-next-line
   }, [state.fullNavbar]);
 
@@ -49,6 +49,7 @@ const Navbar: React.FC<NavbarProps> = observer(({ fullNavbar }) => {
     sm:flex-col
     gap-3
     transition-width
+    bg-[#010409]
     ${state.fullNavbar ? "sm:w-52" : "sm:w-16"}
   `;
 
@@ -94,7 +95,9 @@ const Navbar: React.FC<NavbarProps> = observer(({ fullNavbar }) => {
         <Element text="Contact me" icon={AiOutlineForm} />
       </NavLink>
       <Element clear className="hidden sm:flex" />
-      <Element text="Sign in" icon={AiOutlineUser} last />
+      <a href="https://github.com/AndreiTka4iov" className="mt-auto">
+        <Element text="GitHub" icon={AiFillGithub} last />
+      </a>
     </nav>
   );
 });

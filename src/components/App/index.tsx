@@ -2,6 +2,7 @@ import HomePage from "../../pages/HomePage";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "../Navbar";
 import { useState } from "react";
+import AboutPage from "../../pages/AboutPage";
 
 function App() {
   const [fullNavbar, setFullNavbar] = useState(false);
@@ -23,7 +24,7 @@ function App() {
       <div className={style}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/projects" element={<HomePage />} />
           <Route path="/contact" element={<HomePage />} />
         </Routes>
